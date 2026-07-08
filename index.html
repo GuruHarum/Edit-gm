@@ -606,78 +606,7 @@
                         if (!classesData.has(classNumber)) {
                             classesData.set(classNumber, new Set());
                         }
-                        
-                        // Add all class names to the set
-                        classesData.get(classNumber).add(className);
-                        
-                        // Store complex class names (with both numbers and text) separately
-                        if (isComplexClassName(className)) {
-                            if (!classNamesByNumber.has(classNumber)) {
-                                classNamesByNumber.set(classNumber, new Set());
-                            }
-                            classNamesByNumber.get(classNumber).add(className);
-                        }
-                    }
-                });
-                
-                populateClassFilters();
-                hideLoading();
-                
-                // If we're on page 2, refresh the student list
-                if (!page2.classList.contains('hidden')) {
-                    renderStudents();
-                }
-            } catch (error) {
-                console.error('Error fetching students:', error);
-                showNotification('error', 'Gagal memuat data siswa. Silakan coba lagi.');
-                hideLoading();
-            }
-        }
-        
-        // Fetch Attendance Data from Google Sheets CSV
-        async function fetchAttendanceData() {
-            showLoading();
-            
-            try {
-                const response = await fetch(addCacheBuster(ATTENDANCE_CSV_URL));
-                if (!response.ok) {
-                    throw new Error('Failed to fetch attendance data');
-                }
-                
-                const csvText = await response.text();
-                attendanceData = parseCSV(csvText);
-
-                console.log('attendanceData:', attendanceData);
-                
-                // Map CSV column names to our expected property names
-                attendanceData = attendanceData.map(record => ({
-                    date: record.date || record.tanggal || record.Tanggal || '',
-                    teacher: record.teacher || record.guru || record.Guru || '',
-                    class: record.class || record.kelas || record.Kelas || '',
-                    student: record.student || record.siswa || record['nama siswa'] || record['Nama Siswa'] || '',
-                    status: record.status || record.Status || '',
-                    note: record.note || record.catatan || record.Catatan || ''
-                }));
-                
-                if (isAdmin) {
-                    renderAdminData();
-                    checkAndUpdateMonthlyReport();
-                }
-                
-                // If we're on page 2, refresh the student list
-                if (!page2.classList.contains('hidden')) {
-                    renderStudents();
-                }
-                
-                hideLoading();
-            } catch (error) {
-                console.error('Error fetching attendance data:', error);
-                showNotification('error', 'Gagal memuat data absensi. Silakan coba lagi.');
-                hideLoading();
-            }
-        }
-        
-        // Check if we need to update the monthly report
+    
         function checkAndUpdateMonthlyReport() {
             const month = filterMonth.value;
             const teacher = filterTeacher.value;
