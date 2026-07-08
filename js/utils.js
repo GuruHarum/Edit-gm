@@ -105,3 +105,32 @@ function getAttendanceRecord(studentName, date = null) {
                 record.student === studentName
             );
 }
+
+function extractClassNumber(className) {
+            if (!className) return null;
+            const match = className.match(/\d+/);
+            return match ? match[0] : null;
+}
+
+function isSimpleClassNumber(className) {
+            if (!className) return false;
+            return /^\d+$/.test(className);
+}
+
+function isComplexClassName(className) {
+            if (!className) return false;
+            return /\d/.test(className) && /[a-zA-Z]/.test(className);
+}
+
+function addCacheBuster(url) {
+            const cacheBuster = `cache=${Date.now()}`;
+            return url.includes('?') ? `${url}&${cacheBuster}` : `${url}?${cacheBuster}`;
+}
+
+function getTodayDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
