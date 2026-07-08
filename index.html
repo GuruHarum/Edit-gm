@@ -411,29 +411,6 @@
             loadingIndicator.classList.remove('show');
         }
         
-        function extractClassNumber(className) {
-            if (!className) return null;
-            
-            // Extract the first number from the class string
-            const match = className.match(/\d+/);
-            return match ? match[0] : null;
-        }
-        
-        // Check if class name is a simple number or contains additional text
-        function isSimpleClassNumber(className) {
-            if (!className) return false;
-            return /^\d+$/.test(className);
-        }
-        
-        // Check if class name contains both numbers and text
-        function isComplexClassName(className) {
-            if (!className) return false;
-            
-            // Check if it contains at least one digit and one letter
-            return /\d/.test(className) && /[a-zA-Z]/.test(className);
-        }
-        
-        // Save attendance record to Google Sheets using iframe method
         async function saveAttendance(studentName, status, note, studentClass) {
             showLoading('Menyimpan data absensi...');
             addDebugLog('Saving attendance', { studentName, status, note });
@@ -576,13 +553,6 @@
             });
         }
         
-        // Add cache busting parameter to URL to prevent caching
-        function addCacheBuster(url) {
-            const cacheBuster = `cache=${Date.now()}`;
-            return url.includes('?') ? `${url}&${cacheBuster}` : `${url}?${cacheBuster}`;
-        }
-        
-        // Fetch Teachers Data from Google Sheets CSV
         async function fetchTeachers() {
             try {
                 showLoading();
@@ -1128,16 +1098,6 @@ document.querySelectorAll('.save-btn').forEach((saveBtn) => {
                 reportContainer.style.display = 'none';
             }
             
-            // Tambahkan fungsi util di atas jika belum ada
-function getTodayDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-// Filter attendance data based on selected filters, TAPI hanya hari ini
 filteredAttendanceData = attendanceData.filter(record => {
     // Hanya data absensi hari ini saja
     if (record.date !== getTodayDate()) return false;
