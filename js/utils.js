@@ -10,6 +10,28 @@ function formatCurrentDate() {
             return `${day}, ${date} ${month} ${year}`;
 }
 
+function formatDateForStorage() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+}
+
+function formatDateForDisplay(dateString) {
+            if (!dateString) return '';
+            
+            const parts = dateString.split('-');
+            if (parts.length !== 3) return dateString;
+            
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function getMonthName(monthNumber) {
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            return months[parseInt(monthNumber) - 1];
+}
+
 function getDaysInMonth(year, month) {
             return new Date(year, month, 0).getDate();
 }
@@ -60,4 +82,26 @@ function parseCSV(csvText) {
             }
             
             return result;
+}
+
+function isAttendanceRecorded(studentName, date = null) {
+            const checkDate = date || formatDateForStorage();
+            
+            // Filter attendance data for this student, teacher, class, and date
+            const record = attendanceData.find(record => 
+                record.date === checkDate && 
+                record.teacher === selectedTeacher && 
+                record.student === studentName
+            );
+            
+            return record !== undefined;
+}
+
+function getAttendanceRecord(studentName, date = null) {
+            const checkDate = date || formatDateForStorage();
+            return attendanceData.find(record => 
+                record.date === checkDate && 
+                record.teacher === selectedTeacher && 
+                record.student === studentName
+            );
 }
